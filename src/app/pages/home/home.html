@@ -1,0 +1,13 @@
+<div class="home-container">
+  <header>
+    <h1>Make My Drink</h1>
+  </header>
+
+  <div class="glassy-card">
+    <div class="cards-grid">
+      @for (card of cards; track card.route) {
+      <app-card-item [data]="card"></app-card-item>
+      }
+    </div>
+  </div>
+</div>

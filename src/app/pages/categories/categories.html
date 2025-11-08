@@ -1,0 +1,46 @@
+<div class="categories-container">
+  <header>
+    <div class="header-controls">
+      <p-button
+        icon="pi pi-arrow-left"
+        (click)="back()"
+        [text]="true"
+        [rounded]="true"
+        styleClass="back-button"
+      />
+      <h1>Nossas Categorias</h1>
+    </div>
+
+    <p-icon-field iconPosition="left" styleClass="search-bar">
+      <i class="pi pi-search"></i>
+      <input
+        type="text"
+        pInputText
+        [value]="searchTerm()"
+        (input)="onSearch($event)"
+        placeholder="Procurar categoria..."
+      />
+    </p-icon-field>
+  </header>
+
+  <div class="glassy-card">
+    <div class="cards-grid">
+      @for (category of filteredCategories(); track category.name) {
+      <div class="category-card">
+        <div class="category-image-container">
+          <img
+            [ngSrc]="category.imageUrl"
+            [alt]="category.name"
+            width="200"
+            height="200"
+            loading="lazy"
+          />
+        </div>
+        <div class="category-info">
+          <h3 class="category-name">{{ category.name }}</h3>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

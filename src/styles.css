@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    sans-serif;
+  background-color: #f7baba;
+  background-image: linear-gradient(to right, rgba(255, 132, 143, 0.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 132, 143, 0.5) 3px, transparent 3px);
+  background-size: 8px 8px;
+  min-height: 100vh;
+}

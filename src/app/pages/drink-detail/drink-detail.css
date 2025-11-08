@@ -1,0 +1,173 @@
+.detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.top-nav {
+  margin-bottom: 24px;
+}
+
+.back-button {
+  background: white;
+  border: 2px solid #ce5f68;
+  color: #ce5f68;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-button:hover {
+  background: #ce5f68;
+  color: white;
+}
+
+header {
+  margin-bottom: 32px;
+}
+
+header h1 {
+  font-size: 48px;
+  font-weight: bold;
+  color: #ce5f68;
+  margin: 0;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.image-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.image-section img {
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.badges {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+.badge.category {
+  background: #6366f1;
+}
+
+.badge.alcoholic {
+  background: #10b981;
+}
+
+.badge.glass {
+  background: #f59e0b;
+}
+
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+section h2 {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 16px;
+}
+
+.ingredients ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ingredients li {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.ingredient-name {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.ingredient-measure {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.instructions {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.instructions p {
+  line-height: 1.8;
+  color: #4b5563;
+  font-size: 16px;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 80px 24px;
+}
+
+.loading p,
+.error p {
+  font-size: 24px;
+  color: #6b7280;
+}
+
+.error button {
+  margin-top: 24px;
+  padding: 12px 32px;
+  background: #ce5f68;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+
+  header h1 {
+    font-size: 32px;
+  }
+}

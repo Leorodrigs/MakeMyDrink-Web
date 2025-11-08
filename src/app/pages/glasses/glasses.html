@@ -1,0 +1,46 @@
+<div class="glasses-container">
+  <header>
+    <div class="header-controls">
+      <p-button
+        icon="pi pi-arrow-left"
+        (click)="back()"
+        [text]="true"
+        [rounded]="true"
+        styleClass="back-button"
+      />
+      <h1>Tipos de Copo</h1>
+    </div>
+
+    <p-icon-field iconPosition="left" styleClass="search-bar">
+      <i class="pi pi-search"></i>
+      <input
+        type="text"
+        pInputText
+        [value]="searchTerm()"
+        (input)="onSearch($event)"
+        placeholder="Procurar tipo de copo..."
+      />
+    </p-icon-field>
+  </header>
+
+  <div class="glassy-card">
+    <div class="cards-grid">
+      @for (glass of filteredGlasses(); track glass.name) {
+      <div class="glass-card">
+        <div class="glass-image-container">
+          <img
+            [ngSrc]="glass.imageUrl"
+            [alt]="glass.name"
+            width="200"
+            height="200"
+            loading="lazy"
+          />
+        </div>
+        <div class="glass-info">
+          <h3 class="glass-name">{{ glass.name }}</h3>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
