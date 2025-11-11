@@ -6,17 +6,15 @@ import {
   inject,
   computed,
 } from '@angular/core';
-import { CommonModule, NgOptimizedImage, Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { DrinksService, Drink } from '../../services/drinks';
-import { ButtonModule } from 'primeng/button';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputTextModule } from 'primeng/inputtext';
+import { BackButtonComponent } from '../../components/back-button/back-button';
+import { SearchBarComponent } from '../../components/search-bar/search-bar';
+import { CardItemComponent, CardData } from '../../components/card-item/card-item';
 
 @Component({
   selector: 'app-drinks-list',
-  standalone: true,
-  imports: [CommonModule, NgOptimizedImage, ButtonModule, IconFieldModule, InputTextModule],
-  // CORRIGIDO: Apontando para os arquivos corretos
+  imports: [CommonModule, BackButtonComponent, SearchBarComponent, CardItemComponent],
   templateUrl: './drinks.html',
   styleUrls: ['./drinks.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,15 +26,23 @@ export class DrinksComponent implements OnInit {
   private allDrinks = signal<Drink[]>([]);
   public searchTerm = signal<string>('');
 
+  // Computed que filtra APENAS pelo nome do drink
+  // Computed que converte Drinks para CardData
   public filteredDrinks = computed(() => {
     const term = this.searchTerm().toLowerCase();
-    if (!term) {
-      return this.allDrinks();
-    }
-    return this.allDrinks().filter(
+    const drinks = !term
+      ? this.allDrinks()
+      : this.allDrinks().filter((drink) => drink.strDrink.toLowerCase().includes(term));
+
+    // Mapeia para CardData com imagem e subtitle
+    return drinks.map(
       (drink) =>
-        drink.strDrink.toLowerCase().includes(term) ||
-        drink.strCategory.toLowerCase().includes(term)
+        ({
+          title: drink.strDrink,
+          image: drink.strDrinkThumb,
+          subtitle: drink.strCategory,
+          route: `/drinks/${drink.idDrink}`, // CORRIJA: estava sem a barra inicial
+        } as CardData)
     );
   });
 
@@ -45,12 +51,11 @@ export class DrinksComponent implements OnInit {
     this.allDrinks.set(allDrinks);
   }
 
-  onSearch(event: Event): void {
-    const term = (event.target as HTMLInputElement).value;
-    this.searchTerm.set(term);
+  onSearch(value: string): void {
+    this.searchTerm.set(value);
   }
 
-  back(): void {
-    this.location.back();
+  onDrinkClick(cardData: CardData): void {
+    console.log('Drink clicado:', cardData.title);
   }
 }

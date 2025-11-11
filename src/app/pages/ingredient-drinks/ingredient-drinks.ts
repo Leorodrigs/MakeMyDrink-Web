@@ -6,18 +6,16 @@ import {
   inject,
   computed,
 } from '@angular/core';
-import { CommonModule, NgOptimizedImage, Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { DrinksService, Drink } from '../../services/drinks';
-import { ButtonModule } from 'primeng/button';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputTextModule } from 'primeng/inputtext';
+import { BackButtonComponent } from '../../components/back-button/back-button';
+import { SearchBarComponent } from '../../components/search-bar/search-bar';
+import { CardItemComponent, CardData } from '../../components/card-item/card-item';
 
 @Component({
   selector: 'app-ingredient-drinks',
-  standalone: true,
-  imports: [CommonModule, NgOptimizedImage, ButtonModule, IconFieldModule, InputTextModule],
-  // CORRIGIDO: Apontando para os arquivos corretos
+  imports: [CommonModule, BackButtonComponent, SearchBarComponent, CardItemComponent],
   templateUrl: './ingredient-drinks.html',
   styleUrls: ['./ingredient-drinks.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,38 +25,49 @@ export class IngredientDrinksComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private location = inject(Location);
 
-  private routeDrinks = signal<Drink[]>([]);
-  public searchTerm = signal<string>('');
   public ingredientName = signal<string>('');
+  private ingredientDrinks = signal<Drink[]>([]);
+  public searchTerm = signal<string>('');
 
+  // Computed que filtra drinks do ingrediente pelo nome
   public filteredDrinks = computed(() => {
     const term = this.searchTerm().toLowerCase();
-    if (!term) {
-      return this.routeDrinks();
-    }
-    return this.routeDrinks().filter((drink) => drink.strDrink.toLowerCase().includes(term));
+    const drinks = !term
+      ? this.ingredientDrinks()
+      : this.ingredientDrinks().filter((drink) => drink.strDrink.toLowerCase().includes(term));
+
+    // Mapeia para CardData com imagem e subtitle
+    return drinks.map(
+      (drink) =>
+        ({
+          title: drink.strDrink,
+          image: drink.strDrinkThumb,
+          subtitle: drink.strCategory,
+          route: `/drinks/${drink.idDrink}`,
+        } as CardData)
+    );
   });
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      // Usa 'name' como definido no seu app.routes.ts
-      const name = params.get('name');
-      if (name) {
-        this.ingredientName.set(decodeURIComponent(name));
-        const filteredDrinks = this.drinksService.getDrinksByIngredient(name);
-        this.routeDrinks.set(filteredDrinks);
-      } else {
-        console.error('Nome do ingrediente não encontrado na rota!');
-      }
-    });
+    // Pega o nome do ingrediente da rota e decodifica
+    const ingredientNameParam = this.route.snapshot.paramMap.get('name');
+
+    if (ingredientNameParam) {
+      // Decodifica o parâmetro da URL
+      const decodedName = decodeURIComponent(ingredientNameParam);
+      this.ingredientName.set(decodedName);
+
+      // Busca drinks do ingrediente usando o nome decodificado
+      const drinks = this.drinksService.getDrinksByIngredient(decodedName);
+      this.ingredientDrinks.set(drinks);
+    }
   }
 
-  onSearch(event: Event): void {
-    const term = (event.target as HTMLInputElement).value;
-    this.searchTerm.set(term);
+  onSearch(value: string): void {
+    this.searchTerm.set(value);
   }
 
-  back(): void {
-    this.location.back();
+  onDrinkClick(cardData: CardData): void {
+    console.log('Drink clicado:', cardData.title);
   }
 }

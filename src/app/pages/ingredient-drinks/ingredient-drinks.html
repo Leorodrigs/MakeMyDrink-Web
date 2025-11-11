@@ -1,46 +1,24 @@
 <div class="ingredient-drinks-container">
   <header>
     <div class="header-controls">
-      <p-button
-        icon="pi pi-arrow-left"
-        (click)="back()"
-        [text]="true"
-        [rounded]="true"
-        styleClass="back-button"
-      />
-      <h1>{{ ingredientName() }}</h1>
+      <app-back-button />
+      <h1>Drinks com {{ ingredientName() }}</h1>
     </div>
 
-    <p-icon-field iconPosition="left" styleClass="search-bar">
-      <i class="pi pi-search"></i>
-      <input
-        type="text"
-        pInputText
-        [value]="searchTerm()"
-        (input)="onSearch($event)"
-        placeholder="Procurar drink com este ingrediente..."
-      />
-    </p-icon-field>
+    <app-search-bar
+      [value]="searchTerm()"
+      [placeholder]="'Procurar drink...'"
+      (valueChange)="onSearch($event)"
+    />
   </header>
 
   <div class="glassy-card">
     <div class="cards-grid">
-      @for (drink of filteredDrinks(); track drink.idDrink) {
-      <!-- Reutiliza o estilo .drink-card -->
-      <div class="drink-card">
-        <div class="drink-image-container">
-          <img
-            [ngSrc]="drink.strDrinkThumb"
-            [alt]="drink.strDrink"
-            width="200"
-            height="200"
-            loading="lazy"
-          />
-        </div>
-        <div class="drink-info">
-          <h3 class="drink-name">{{ drink.strDrink }}</h3>
-          <p class="drink-categories">{{ drink.strCategory }}</p>
-        </div>
+      @if (filteredDrinks().length > 0) { @for (drink of filteredDrinks(); track drink.title) {
+      <app-card-item [data]="drink" (cardClick)="onDrinkClick($event)" />
+      } } @else {
+      <div class="no-results">
+        <p>Nenhum drink encontrado com este ingrediente.</p>
       </div>
       }
     </div>

@@ -1,23 +1,23 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, signal, inject } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { DrinksService, Drink } from '../../services/drinks';
+import { BackButtonComponent } from '../../components/back-button/back-button';
 
 @Component({
   selector: 'app-drink-detail',
-  imports: [],
+  imports: [CommonModule, BackButtonComponent],
   templateUrl: './drink-detail.html',
   styleUrls: ['./drink-detail.css'],
 })
 export class DrinkDetailComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private location = inject(Location);
+  private drinksService = inject(DrinksService);
+
   drink = signal<Drink | null>(null);
   loading = signal(true);
   ingredients = signal<Array<{ name: string; measure: string }>>([]);
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private drinksService: DrinksService
-  ) {}
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -56,9 +56,5 @@ export class DrinkDetailComponent implements OnInit {
     }
 
     this.ingredients.set(ingredientsList);
-  }
-
-  goBack() {
-    this.router.navigate(['/drinks']);
   }
 }

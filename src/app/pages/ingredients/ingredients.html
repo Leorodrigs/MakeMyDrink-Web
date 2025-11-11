@@ -1,45 +1,21 @@
 <div class="ingredients-container">
   <header>
     <div class="header-controls">
-      <p-button
-        icon="pi pi-arrow-left"
-        (click)="back()"
-        [text]="true"
-        [rounded]="true"
-        styleClass="back-button"
-      />
-      <h1>Nossos Ingredientes</h1>
+      <app-back-button />
+      <h1>Ingredientes</h1>
     </div>
 
-    <p-icon-field iconPosition="left" styleClass="search-bar">
-      <i class="pi pi-search"></i>
-      <input
-        type="text"
-        pInputText
-        [value]="searchTerm()"
-        (input)="onSearch($event)"
-        placeholder="Procurar ingrediente..."
-      />
-    </p-icon-field>
+    <app-search-bar
+      [value]="searchTerm()"
+      [placeholder]="'Procurar ingrediente...'"
+      (valueChange)="onSearch($event)"
+    />
   </header>
 
   <div class="glassy-card">
     <div class="cards-grid">
-      @for (ingredient of filteredIngredients(); track ingredient.name) {
-      <div class="ingredient-card">
-        <div class="ingredient-image-container">
-          <img
-            [ngSrc]="ingredient.imageUrl"
-            [alt]="ingredient.name"
-            width="200"
-            height="200"
-            loading="lazy"
-          />
-        </div>
-        <div class="ingredient-info">
-          <h3 class="ingredient-name">{{ ingredient.name }}</h3>
-        </div>
-      </div>
+      @for (ingredient of filteredIngredients(); track ingredient.title) {
+      <app-card-item [data]="ingredient" (cardClick)="onIngredientClick($event)" />
       }
     </div>
   </div>

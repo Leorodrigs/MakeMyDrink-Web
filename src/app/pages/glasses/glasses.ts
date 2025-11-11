@@ -6,22 +6,19 @@ import {
   inject,
   computed,
 } from '@angular/core';
-import { CommonModule, NgOptimizedImage, Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { DrinksService } from '../../services/drinks';
-import { ButtonModule } from 'primeng/button';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputTextModule } from 'primeng/inputtext';
+import { BackButtonComponent } from '../../components/back-button/back-button';
+import { SearchBarComponent } from '../../components/search-bar/search-bar';
+import { CardItemComponent, CardData } from '../../components/card-item/card-item';
 
 export interface GlassDisplayItem {
   name: string;
-  imageUrl: string;
 }
 
 @Component({
   selector: 'app-glasses-list',
-  standalone: true,
-  imports: [CommonModule, NgOptimizedImage, ButtonModule, IconFieldModule, InputTextModule],
-  // CORRIGIDO: Apontando para os arquivos corretos
+  imports: [CommonModule, BackButtonComponent, SearchBarComponent, CardItemComponent],
   templateUrl: './glasses.html',
   styleUrls: ['./glasses.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,33 +30,36 @@ export class GlassesComponent implements OnInit {
   private allGlasses = signal<GlassDisplayItem[]>([]);
   public searchTerm = signal<string>('');
 
+  // Computed que converte para CardData SEM imagem
   public filteredGlasses = computed(() => {
     const term = this.searchTerm().toLowerCase();
-    if (!term) {
-      return this.allGlasses();
-    }
-    return this.allGlasses().filter((item) => item.name.toLowerCase().includes(term));
+    const glasses = !term
+      ? this.allGlasses()
+      : this.allGlasses().filter((item) => item.name.toLowerCase().includes(term));
+
+    return glasses.map(
+      (glass) =>
+        ({
+          title: glass.name,
+          route: `/glasses/${encodeURIComponent(glass.name)}`, // Adicione esta linha
+        } as CardData)
+    );
   });
 
   ngOnInit(): void {
     const glassNames = this.drinksService.getGlasses();
-    const displayItems: GlassDisplayItem[] = glassNames.map((name) => {
-      const drinksInGlass = this.drinksService.getDrinksByGlass(name);
-      const imageUrl =
-        drinksInGlass.length > 0
-          ? drinksInGlass[0].strDrinkThumb
-          : 'https://placehold.co/200x200/f5f5f4/333?text=Sem+Imagem';
-      return { name: name, imageUrl: imageUrl };
-    });
+    const displayItems: GlassDisplayItem[] = glassNames.map((name) => ({
+      name: name,
+    }));
     this.allGlasses.set(displayItems);
   }
 
-  onSearch(event: Event): void {
-    const term = (event.target as HTMLInputElement).value;
-    this.searchTerm.set(term);
+  onSearch(value: string): void {
+    this.searchTerm.set(value);
   }
 
-  back(): void {
-    this.location.back();
+  onGlassClick(cardData: CardData): void {
+    console.log('Copo clicado:', cardData.title);
+    // Adicione sua lógica de navegação aqui
   }
 }

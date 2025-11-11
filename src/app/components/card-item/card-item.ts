@@ -1,31 +1,37 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 export interface CardData {
   title: string;
-  image: string;
+  image?: string;
   route?: string;
   subtitle?: string;
 }
 
 @Component({
   selector: 'app-card-item',
-  standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './card-item.html',
   styleUrls: ['./card-item.css'],
 })
 export class CardItemComponent {
-  @Input() data!: CardData;
-  @Output() cardClick = new EventEmitter<CardData>();
+  data = input.required<CardData>();
+  cardClick = output<CardData>();
 
   constructor(private router: Router) {}
 
   navigate() {
-    if (this.cardClick.observed) {
-      this.cardClick.emit(this.data);
-    } else if (this.data.route) {
-      this.router.navigate([this.data.route]);
+    const cardData = this.data();
+    console.log('Card clicado:', cardData);
+
+    // Sempre emite o evento para o pai decidir
+    this.cardClick.emit(cardData);
+
+    // Navega automaticamente se houver rota
+    if (cardData.route) {
+      console.log('Navegando para:', cardData.route);
+      this.router.navigate([cardData.route]);
     }
   }
 }

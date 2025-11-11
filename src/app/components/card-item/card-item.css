@@ -1,16 +1,15 @@
+/* Estilos base do card */
 .card-container {
-  width: 150px;
-  min-height: 180px;
   border-radius: 16px;
   border: 1px solid #ced4db;
   padding: 24px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 230px;
 }
 
 .card-container:hover {
@@ -19,17 +18,41 @@
   transform: translateY(-2px);
 }
 
+/* Estilo quando TEM imagem */
+.card-container.with-image {
+  min-height: 280px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+/* Estilo quando NÃO TEM imagem */
+.card-container.no-image {
+  min-height: auto;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-container.no-image:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  filter: brightness(1);
+}
+
 .card-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   color: #991b1b;
+  width: 100%;
+}
+
+.card-container.no-image .card-content {
+  color: #333;
 }
 
 img {
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  height: 180px;
   border-radius: 12px;
   margin-bottom: 16px;
   object-fit: cover;
@@ -39,10 +62,42 @@ h3 {
   font-size: 20px;
   font-weight: bold;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.card-container.no-image h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
 }
 
 .subtitle {
   font-size: 14px;
   color: #64748b;
   margin: 8px 0 0 0;
+}
+
+/* --- Responsividade --- */
+
+/* Tablets (601px - 768px): 100% da coluna do grid */
+@media (max-width: 768px) {
+  .card-container {
+    width: 100%;
+  }
+}
+
+/* Mobile (<600px): 90% da largura da tela, texto quebra linha */
+@media (max-width: 600px) {
+  .card-container {
+    width: 90vw;
+    max-width: 500px;
+  }
+
+  .card-container h3 {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
 }

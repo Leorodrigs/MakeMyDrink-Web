@@ -1,9 +1,15 @@
-<div class="card-container" (click)="navigate()">
+<div
+  class="card-container"
+  [ngClass]="{ 'no-image': !data().image, 'with-image': data().image }"
+  (click)="navigate()"
+>
   <div class="card-content">
-    <img [src]="data.image" [alt]="data.title" />
-    <h3>{{ data.title }}</h3>
-    @if (data.subtitle) {
-    <p class="subtitle">{{ data.subtitle }}</p>
+    @if (data().image) {
+    <img [src]="data().image" [alt]="data().title" />
+    }
+    <h3>{{ data().title }}</h3>
+    @if (data().subtitle) {
+    <p class="subtitle">{{ data().subtitle }}</p>
     }
   </div>
 </div>

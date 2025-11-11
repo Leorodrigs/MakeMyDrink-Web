@@ -6,22 +6,19 @@ import {
   inject,
   computed,
 } from '@angular/core';
-import { CommonModule, NgOptimizedImage, Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { DrinksService } from '../../services/drinks';
-import { ButtonModule } from 'primeng/button';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputTextModule } from 'primeng/inputtext';
+import { BackButtonComponent } from '../../components/back-button/back-button';
+import { CardItemComponent, CardData } from '../../components/card-item/card-item';
+import { SearchBarComponent } from '../../components/search-bar/search-bar'; // ADICIONE
 
 export interface CategoryDisplayItem {
   name: string;
-  imageUrl: string;
 }
 
 @Component({
   selector: 'app-categories-list',
-  standalone: true,
-  imports: [CommonModule, NgOptimizedImage, ButtonModule, IconFieldModule, InputTextModule],
-  // CORRIGIDO: Apontando para os arquivos corretos
+  imports: [CommonModule, BackButtonComponent, CardItemComponent, SearchBarComponent],
   templateUrl: './categories.html',
   styleUrls: ['./categories.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,32 +32,32 @@ export class CategoriesComponent implements OnInit {
 
   public filteredCategories = computed(() => {
     const term = this.searchTerm().toLowerCase();
-    if (!term) {
-      return this.allCategories();
-    }
-    return this.allCategories().filter((category) => category.name.toLowerCase().includes(term));
+    const categories = !term
+      ? this.allCategories()
+      : this.allCategories().filter((category) => category.name.toLowerCase().includes(term));
+
+    return categories.map(
+      (cat) =>
+        ({
+          title: cat.name,
+          route: `/categories/${encodeURIComponent(cat.name)}`, // Codifica caracteres especiais
+        } as CardData)
+    );
   });
 
   ngOnInit(): void {
     const categoryNames = this.drinksService.getCategories();
-    const displayItems: CategoryDisplayItem[] = categoryNames.map((name) => {
-      const drinksInCat = this.drinksService.getDrinksByCategory(name);
-      const imageUrl =
-        drinksInCat.length > 0
-          ? drinksInCat[0].strDrinkThumb
-          : 'https://placehold.co/200x200/f5f5f4/333?text=Sem+Imagem';
-
-      return { name: name, imageUrl: imageUrl };
-    });
+    const displayItems: CategoryDisplayItem[] = categoryNames.map((name) => ({
+      name: name,
+    }));
     this.allCategories.set(displayItems);
   }
 
-  onSearch(event: Event): void {
-    const term = (event.target as HTMLInputElement).value;
-    this.searchTerm.set(term);
+  onSearch(value: string): void {
+    this.searchTerm.set(value);
   }
 
-  back(): void {
-    this.location.back();
+  onCategoryClick(cardData: CardData): void {
+    console.log('Categoria clicada:', cardData.title);
   }
 }
