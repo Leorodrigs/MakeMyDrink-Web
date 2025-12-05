@@ -18,7 +18,7 @@ export interface IngredientDisplayItem {
 
 @Component({
   selector: 'app-ingredients-list',
-  imports: [CommonModule, BackButtonComponent, SearchBarComponent, CardItemComponent],
+  imports: [CommonModule, BackButtonComponent, CardItemComponent, SearchBarComponent],
   templateUrl: './ingredients.html',
   styleUrls: ['./ingredients.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

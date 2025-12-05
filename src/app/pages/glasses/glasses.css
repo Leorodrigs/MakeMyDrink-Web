@@ -68,6 +68,10 @@ header h1 {
   .glasses-container {
     padding: 80px 5%;
   }
+
+  .cards-grid {
+    grid-template-columns: repeat(3, 230px);
+  }
 }
 
 @media (max-width: 768px) {

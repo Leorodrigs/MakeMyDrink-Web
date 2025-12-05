@@ -56,7 +56,7 @@ header h1 {
 /* --- Grid dos Cards --- */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(3, 230px);
+  grid-template-columns: repeat(4, 230px);
   gap: 24px;
   justify-content: center;
   width: 100%;
@@ -78,13 +78,20 @@ header h1 {
 
 /* --- Responsividade --- */
 
+/* Gap menor nos cards entre 600px e 1024px */
 @media (max-width: 1024px) {
-  .drinks-container {
-    padding: 80px 5%;
+  .cards-grid {
+    gap: 10px; /* Diminui o espaço entre os cards */
+    grid-template-columns: repeat(3, 230px);
   }
 }
 
-@media (max-width: 768px) {
+/* Só para garantir que as imagens nunca percam o arredondamento, também deixe na base: */
+.card-container img {
+  border-radius: 12px;
+}
+
+@media (max-width: 820px) {
   .drinks-container {
     padding: 60px 3%;
   }
